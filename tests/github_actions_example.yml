@@ -1,0 +1,60 @@
+# Example GitHub Actions workflow for running notebook validation tests
+# This file shows how to integrate the test suite into CI/CD
+
+name: Notebook Validation Tests
+
+on:
+  pull_request:
+    paths:
+      - '**.ipynb'
+      - 'tests/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  test-notebooks:
+    name: Validate Notebook Changes
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Run notebook validation tests
+        run: |
+          cd tests
+          python3 -m unittest discover -v
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: tests/test-results.xml
+          retention-days: 30
+
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: test-notebooks
+    if: always()
+    
+    steps:
+      - name: Generate test summary
+        run: |
+          echo "## Notebook Validation Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Tests validate:" >> $GITHUB_STEP_SUMMARY
+          echo "- API migration correctness" >> $GITHUB_STEP_SUMMARY
+          echo "- Content quality and spelling" >> $GITHUB_STEP_SUMMARY
+          echo "- Notebook structure and formatting" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See workflow logs for detailed results." >> $GITHUB_STEP_SUMMARY
