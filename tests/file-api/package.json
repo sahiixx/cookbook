@@ -1,0 +1,11 @@
+{
+  "name": "file-api-tests",
+  "version": "1.0.0",
+  "description": "Tests for File API sample code",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
