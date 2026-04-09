@@ -4,11 +4,27 @@
     "description": "Sample code to use the File API and make Gemini API requests.",
     "private": true,
     "scripts": {
-        "start": "node sample.js"
+        "start": "node sample.js",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage"
     },
     "dependencies": {
         "dotenv": "^16.4.5",
         "googleapis": "^134.0.0",
         "mime-types": "^2.1.35"
+    },
+    "devDependencies": {
+        "jest": "^29.7.0"
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "coverageDirectory": "coverage",
+        "collectCoverageFrom": [
+            "sample.js"
+        ],
+        "testMatch": [
+            "**/tests/**/*.test.js"
+        ]
     }
 }
